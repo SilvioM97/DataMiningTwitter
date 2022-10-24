@@ -92,7 +92,64 @@ The dataset \verb|users.csv| is the smallest one; it provides information about 
 \end{multicols}
 \noindent
 The first thing we did was to assess if the field \verb|id| is a real ID (if each value identifies exactly one record) or not. In order to do that, we just compared the length of the whole DataFrame with that of the unique values of the \verb|id| field and it comes out that they were equal. Hence, we substituted the pandas ids with the user's ids from Twitter. 
+\medbreak \noindent
+We do not want to start with a real preparation phase, however, before trying to understand the data, we want to solve some easy-to-fix issues in order to make the data more manageable.
+\medbreak \noindent
+The next field to analyze is \verb|name|. Having an ID which is a primary key, we don't need the names to be unique, neither we have particular requests for them; therefore, we just had a look at the field \verb|name| and saw that there is just one user with a null name. We decided to give this user a dummy name, i.e. "null\_user".
+\medbreak \noindent
+One interesting attribute is \verb|lang|. Using the command \verb|value_counts| on this field, we observed several things:
+\begin{enumerate}
+    \item There are two users who do not selected a language
+    \item There are some not-existing ISO codes
+    \item There are some variant of the same language (for instance: \verb|en|, \verb|en-gb|, \verb|en-GB|)
+\end{enumerate}
+The third problem was fixed setting every variant of a language to its main language, while the languages in the first two categories were transformed into the dummy language "wrl" (which stays for "wrong language"). However, the amount of records which language belongs to any of the three categories above is very small, so this is not a real problem.
 \smallbreak \noindent
+After these small adjustments, we gave a look at the languages distribution via a bar plot, where the scale of the $y$ axis was set to logarithmic for a better visualization. In the plot reported below, we can see (as we saw from the description of \verb|lang|) that the most frequent language is the English and in the top three languages we have also Italian and Spanish, respectively one and two orders of magnitude below the top language. We can also observe that, approximately half of the languages are negligible (below the $0,1\%$ of the users)  
+
+\begin{minipage}[t]{0.43\textwidth}
+\includegraphics[width=\textwidth]{images/users/lang.png}
+\captionof{figure}{\small Number of users for each language}
+\end{minipage}\hspace{.7cm}
+\begin{minipage}[t]{0.43\textwidth}
+\includegraphics[width=\textwidth]{images/users/bot.png}
+\captionof{figure}{\small Number of bot and non-bot users}
+\end{minipage}
+
+\bigbreak \noindent
+The column \verb|bot| has no problems and, from the simple bar plot above, we can notice that we have almost an equal number of bot and non-bot users.
+
+\medbreak \noindent
+For the field \verb|statuses_count|, we observed that there is a small percentage of null values ($\approx 3,4\% $). We didn't see a trivial and immediate solution to this problem, so we didn't handle it at the time.
+\medbreak \noindent
+Regarding the \verb|created_at| field, we observed that it's a \verb|datetime| object and so we analyzed it exploiting this property.
+\smallbreak \noindent
+First, we looked at the number of account created each year.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.45\linewidth]{images/users/year.png}
+    \label{fig:comparison}
+    \caption{Number of enrollments per year}
+\end{figure}
+
+\smallbreak \noindent
+What this bar chart highlights is that we have a kind of bimodal distribution, with two peaks in the years 2017 and 2019. Clearly, this plot does not give us enough information, so we want to increase the granularity. Hence, for each year, we looked at the number of enrollments day by day.
+\smallbreak \noindent
+In Figure \ref{megaplot} we can observe some strange things. We have a small number of accounts created per day but there are some, apparently anomalous peaks. We will do a further analysis on this strange behaviour later.
+
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\linewidth]{images/users/megaplot.png}
+    \caption{Number of sign-up per day, divided by year}
+    \label{megaplot}
+\end{figure}
+
+
+
+
 
 \subsubsection{Tweets}
 \subsection{Data preparation}
