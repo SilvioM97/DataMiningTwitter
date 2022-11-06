@@ -114,13 +114,16 @@ After these small adjustments, we gave a look at the languages distribution via 
 \begin{minipage}[t]{0.43\textwidth}
 \includegraphics[width=\textwidth]{images/users/bot.png}
 \captionof{figure}{\small Number of bot and non-bot users}
+\label{bot}
 \end{minipage}
 
 \bigbreak \noindent
-The column \verb|bot| has no problems and, from the simple bar plot above, we can notice that we have almost an equal number of bot and non-bot users.
+The column \verb|bot| has no problems and, from the bar plot \ref{bot}, we can notice that we have almost an equal number of bot and non-bot users.
 
 \medbreak \noindent
 For the field \verb|statuses_count|, we observed that there is a small percentage of null values ($\approx 3,4\% $). We didn't see a trivial and immediate solution to this problem, so we didn't handle it at the time.
+\smallbreak \noindent
+One interesting thing is that, counting the number of statuses for both bot and non-bot users, it turned out that the number of statuses made by real users is approximately $8\times$ bigger than that of bots. So, the main activity of bots probably is not that of sharing a lot of statuses.
 \medbreak \noindent
 Regarding the \verb|created_at| field, we observed that it's a \verb|datetime| object and so we analyzed it exploiting this property.
 \smallbreak \noindent
@@ -136,17 +139,24 @@ First, we looked at the number of account created each year.
 \smallbreak \noindent
 What this bar chart highlights is that we have a kind of bimodal distribution, with two peaks in the years 2017 and 2019. Clearly, this plot does not give us enough information, so we want to increase the granularity. Hence, for each year, we looked at the number of enrollments day by day.
 \smallbreak \noindent
-In Figure \ref{megaplot} we can observe some strange things. We have a small number of accounts created per day but there are some, apparently anomalous peaks. We will do a further analysis on this strange behaviour later.
+In Figure \ref{megaplot} we can observe some strange things. We have a small number of accounts created per day but there are some, apparently anomalous, peaks. It is very unlikely for a real user to have these numbers of sign-up in a day. So, we looked at the same plot but by month (we don't need a day-granularity) and where users are divided by \verb|bot| category (Figure \ref{megaplot2}). 
+Effectively, the strange peaks were caused by bots, as one can imagine.
 
 
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=1\linewidth]{images/users/megaplot.png}
-    \caption{Number of sign-up per day, divided by year}
+    \includegraphics[width=0.87\linewidth]{images/users/megaplot.png}
+    \caption{\small Number of sign-up per day, divided by year}
     \label{megaplot}
 \end{figure}
 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.87\linewidth]{images/users/megaplot2.png}
+    \caption{\small Number of sign-up per day, divided by month, flagged by bot/non-bot}
+    \label{megaplot2}
+\end{figure}
 
 
 
